@@ -17,7 +17,7 @@
      <!-- JS: MY TEMPLATE -->
      <script id="template" type="text/x-handlebars-template">
        <li>Title: {{title}}</li>
-       <li>Vote: {{vote}}</li>
+       <li data-id ="{{id}}">Vote: {{vote}} </li>
        <li>Review: {{overview}}</li>
      </script>
      <!-- JS: MY JS -->
@@ -25,9 +25,13 @@
      <title>Boolflix</title>
    </head>
    <body>
-     <h1>Boolflix</h1>
-     <input id="input-txt" type="text" name="" value="">
-     <button id ="input-btn" type="button" name="button">Search!</button>
-     <ul class="films"></ul>
+     <div class="container">
+       <h1>Boolflix</h1>
+       <div class="input-cont">
+         <input id="input-txt" type="text" name="" value="">
+         <button id ="input-btn" type="button" name="button">Search!</button>
+       </div>
+       <ul class="films"></ul>
+     </div>
    </body>
  </html>

@@ -1,7 +1,8 @@
 function ajaxCall() {
 
   var li = $("li");
-  li.remove()
+  li.remove();
+
   var outData = {
 
     api_key: "210aa1b90aa672bcceb73012579eaeef",
@@ -24,38 +25,53 @@ function ajaxCall() {
         alert("Non abbiamo trovato nessun risultato!")
       }
 
-      for (var i = 0; i < ress.length; i++) {
-
-        var res = ress[i];
-        var title = res.title;
-        var vote = res.vote_average;
-        var overview = res.overview;
-
-        stampResults(title, vote, overview);
-      }
+      searchResults(ress);
     },
     error: function(request, state, error) {
 
       alert("L'indirizzo del server è errato!");
     }
-  })
+  });
 }
 
 function userInput() {
 
   var me = $("#input-txt");
-  var meVal = me.val()
+  var meVal = me.val();
 
-  return meVal
+  return meVal;
 }
 
-function stampResults(title, vote, overview) {
+function searchResults(ress) {
+
+  for (var i = 0; i < ress.length; i++) {
+
+    var res = ress[i];
+    var title = res.title;
+    var vote = res.vote_average;
+    var overview = res.overview;
+    var id = res.id;
+
+    stampResults(title, convertVote(vote), overview, id);
+  }
+}
+
+function convertVote(vote) {
+
+  var finalVote = vote / 2;
+  var voteInt = Math.ceil(finalVote);
+
+  return voteInt;
+}
+
+function stampResults(title, vote, overview, id) {
 
   var data = {
 
     title: title,
     vote: vote,
-    overview: overview
+    overview: overview,
+    id: id
   }
 
   var template = $("#template").html();
@@ -63,6 +79,27 @@ function stampResults(title, vote, overview) {
   var finalHTML = compiled(data);
 
   $(".films").append(finalHTML);
+  voteTostar(id, vote);
+}
+
+function voteTostar(id, vote) {
+
+  var liId = $("li[data-id='" + id + "']");
+
+  for (var i = 0; i < 5; i++) {
+
+    var jsStar = document.createElement("i");
+    var jqStar = $(jsStar);
+    jqStar.addClass("fa-star");
+
+    if (i < vote) {
+
+      jqStar.addClass("fas");
+    }
+
+    jqStar.addClass("far");
+    liId.append(jqStar);
+  }
 }
 
 function init() {
