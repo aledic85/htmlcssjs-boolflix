@@ -20,23 +20,31 @@ function ajaxCall() {
       var ress = data.results;
       var totalRes = data.total_results;
 
-      searchResults(ress);
-    },
-    error: function(request, state, error) {
+      if (totalRes == 0) {
 
-      alert("L'indirizzo del server è errato!");
-    }
-  });
+        $.ajax ({
 
-  $.ajax ({
+          url: "https://api.themoviedb.org/3/search/tv",
+          method: "GET",
+          data: outData,
+          success: function(data) {
 
-    url: "https://api.themoviedb.org/3/search/tv",
-    method: "GET",
-    data: outData,
-    success: function(data) {
+            var ress = data.results;
+            var totalRes = data.total_results;
 
-      var ress = data.results;
-      var totalRes = data.total_results;
+            if (totalRes == 0) {
+
+              alert("Non abbiamo trovato nessun risultato!")
+            }
+
+            searchResults(ress);
+          },
+          error: function(request, state, error) {
+
+            alert("L'indirizzo del server è errato!");
+          }
+        });
+      }
 
       searchResults(ress);
     },
