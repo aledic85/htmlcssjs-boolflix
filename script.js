@@ -17,6 +17,12 @@ function ajaxCall() {
     success: function(data) {
 
       var ress = data.results;
+      var totalRes = data.total_results;
+
+      if (totalRes == 0) {
+
+        alert("Non abbiamo trovato nessun risultato!")
+      }
 
       for (var i = 0; i < ress.length; i++) {
 
