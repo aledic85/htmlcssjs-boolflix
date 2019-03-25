@@ -20,10 +20,23 @@ function ajaxCall() {
       var ress = data.results;
       var totalRes = data.total_results;
 
-      if (totalRes == 0) {
+      searchResults(ress);
+    },
+    error: function(request, state, error) {
 
-        alert("Non abbiamo trovato nessun risultato!")
-      }
+      alert("L'indirizzo del server è errato!");
+    }
+  });
+
+  $.ajax ({
+
+    url: "https://api.themoviedb.org/3/search/tv",
+    method: "GET",
+    data: outData,
+    success: function(data) {
+
+      var ress = data.results;
+      var totalRes = data.total_results;
 
       searchResults(ress);
     },
@@ -51,8 +64,10 @@ function searchResults(ress) {
     var vote = res.vote_average;
     var overview = res.overview;
     var id = res.id;
+    var language = res.original_language;
+    var name = res.name;
 
-    stampResults(title, convertVote(vote), overview, id);
+    stampResults(title, convertVote(vote), overview, id, language, name);
   }
 }
 
@@ -64,14 +79,16 @@ function convertVote(vote) {
   return voteInt;
 }
 
-function stampResults(title, vote, overview, id) {
+function stampResults(title, vote, overview, id, language, name) {
 
   var data = {
 
     title: title,
     vote: vote,
     overview: overview,
-    id: id
+    id: id,
+    lang: language,
+    name: name,
   }
 
   var template = $("#template").html();
