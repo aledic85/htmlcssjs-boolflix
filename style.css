@@ -38,7 +38,7 @@ body {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  width: 33%;
+  width: 360px;
   height: 100%;
   background-size: cover;
   background-position: center;
@@ -50,7 +50,7 @@ ul {
   display: none;
   background: rgb(79, 68, 55);
   height: 100%;
-  padding: 50px;
+  padding: 10px;
 }
 
 li {
