@@ -196,6 +196,7 @@ function filmEnter() {
   var me = $(this);
 
   me.children("ul").show();
+  me.css("cursor", "pointer")
 }
 
 function filmLeave() {
@@ -208,12 +209,19 @@ function filmLeave() {
 function init() {
 
   var input = $("#input-btn");
+  var inputTxt = $("#input-txt");
 
   input.on("click", ajaxCall);
   $(document).on("mouseenter", ".films", filmEnter);
   $(document).on("mouseleave", ".films", filmLeave);
-
   mostPopularFilms();
+  inputTxt.keyup(function(e) {
+
+    if (e.which == 13) {
+
+      ajaxCall()
+    }
+  })
 }
 
 $(document).ready(init);
