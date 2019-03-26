@@ -1,6 +1,6 @@
 function ajaxCall() {
 
-  var li = $("li");
+  var li = $(".films");
   li.remove();
 
   var outData = {
@@ -75,7 +75,7 @@ function searchResults(ress) {
     var language = res.original_language;
     var name = res.name;
     var pos = res.poster_path;
-    var poster = "https://image.tmdb.org/t/p/w185" + pos;
+    var poster = "https://image.tmdb.org/t/p/original" + pos;
 
     stampResults(title, convertVote(vote), overview, id, language, name, poster);
   }
@@ -106,7 +106,7 @@ function stampResults(title, vote, overview, id, language, name, poster) {
   var compiled = Handlebars.compile(template);
   var finalHTML = compiled(data);
 
-  $(".films").append(finalHTML);
+  $(".container").append(finalHTML);
   voteTostar(id, vote);
 }
 
@@ -130,11 +130,28 @@ function voteTostar(id, vote) {
   }
 }
 
+function filmEnter() {
+
+  var me = $(this);
+
+  me.css("background-color", "grey");
+  me.children("ul").show();
+}
+
+function filmLeave() {
+
+  var me = $(this);
+
+  me.children("ul").hide();
+}
+
 function init() {
 
   var input = $("#input-btn");
 
   input.on("click", ajaxCall);
+  $(document).on("mouseenter", ".films", filmEnter);
+  $(document).on("mouseleave", ".films", filmLeave);
 }
 
 $(document).ready(init);
