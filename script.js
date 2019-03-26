@@ -89,6 +89,44 @@ function convertVote(vote) {
   return voteInt;
 }
 
+function fromLangToFlag(language) {
+
+  var flag;
+
+  switch (language) {
+    case "it":
+
+      flag = "img/italy.png";
+      break;
+
+    case "en":
+
+      flag = "img/england.png";
+      break;
+
+    case "de":
+
+      flag = "img/germany.png";
+      break;
+
+    case "fr":
+
+      flag = "img/france.png";
+      break;
+
+    case "es":
+
+      flag = "img/spain.png";
+      break;
+
+    default:
+
+      flag = "img/unknow.svg";
+  }
+
+  return flag;
+}
+
 function stampResults(title, vote, overview, id, language, name, poster) {
 
   var data = {
@@ -97,7 +135,7 @@ function stampResults(title, vote, overview, id, language, name, poster) {
     vote: vote,
     overview: overview,
     id: id,
-    lang: language,
+    lang: fromLangToFlag(language),
     name: name,
     poster: poster
   }
