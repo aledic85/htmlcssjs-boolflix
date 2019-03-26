@@ -74,8 +74,10 @@ function searchResults(ress) {
     var id = res.id;
     var language = res.original_language;
     var name = res.name;
+    var pos = res.poster_path;
+    var poster = "https://image.tmdb.org/t/p/w185" + pos;
 
-    stampResults(title, convertVote(vote), overview, id, language, name);
+    stampResults(title, convertVote(vote), overview, id, language, name, poster);
   }
 }
 
@@ -87,7 +89,7 @@ function convertVote(vote) {
   return voteInt;
 }
 
-function stampResults(title, vote, overview, id, language, name) {
+function stampResults(title, vote, overview, id, language, name, poster) {
 
   var data = {
 
@@ -97,6 +99,7 @@ function stampResults(title, vote, overview, id, language, name) {
     id: id,
     lang: language,
     name: name,
+    poster: poster
   }
 
   var template = $("#template").html();
