@@ -77,6 +77,11 @@ function searchResults(ress) {
     var pos = res.poster_path;
     var poster = "https://image.tmdb.org/t/p/original" + pos;
 
+    if (pos == null) {
+
+      poster = "https://extension.illinois.edu/stain/stains-hi/235.jpg"
+    }
+
     stampResults(title, convertVote(vote), overview, id, language, name, poster);
   }
 }
@@ -172,7 +177,6 @@ function filmEnter() {
 
   var me = $(this);
 
-  me.css("background-color", "grey");
   me.children("ul").show();
 }
 
