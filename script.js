@@ -1,3 +1,21 @@
+function mostPopularFilms() {
+
+  $.ajax ({
+
+    url: "https://api.themoviedb.org/3/trending/all/week?api_key=210aa1b90aa672bcceb73012579eaeef&language=it-IT",
+    method: "GET",
+    success: function(data) {
+
+      var ress = data.results;
+      searchResults(ress);
+    },
+    error: function(request, state, error) {
+
+      alert("L'indirizzo del server è errato!");
+    }
+  })
+}
+
 function ajaxCall() {
 
   var li = $(".films");
@@ -194,6 +212,8 @@ function init() {
   input.on("click", ajaxCall);
   $(document).on("mouseenter", ".films", filmEnter);
   $(document).on("mouseleave", ".films", filmLeave);
+
+  mostPopularFilms();
 }
 
 $(document).ready(init);
