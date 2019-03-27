@@ -88,3 +88,12 @@ img {
   cursor: pointer;
   height: 25px;
 }
+
+@media all and (max-width: 960px) {
+
+  li {
+
+    font-size: 10px;
+  }
+
+}
