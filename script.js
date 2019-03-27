@@ -42,6 +42,11 @@ function searchMovieAndtvSeries() {
       var ress = data.results;
       var totalRes = data.total_results;
 
+      if (ress == 0) {
+
+        alert("Nessun risultato!");
+      }
+
       searchResults(ress);
     },
     error: function(request, state, error) {
