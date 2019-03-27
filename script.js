@@ -2,8 +2,12 @@ function mostPopularFilms() {
 
   $.ajax ({
 
-    url: "https://api.themoviedb.org/3/trending/all/week?api_key=210aa1b90aa672bcceb73012579eaeef&language=it-IT",
+    url: "https://api.themoviedb.org/3/trending/all/week",
     method: "GET",
+	  data: {
+		    api_key: "210aa1b90aa672bcceb73012579eaeef",
+		    language: "it-IT"
+      },
     success: function(data) {
 
       var ress = data.results;
@@ -16,7 +20,7 @@ function mostPopularFilms() {
   })
 }
 
-function ajaxCall() {
+function searchMovieAndtvSeries() {
 
   var films = $(".films");
   films.remove();
@@ -30,39 +34,13 @@ function ajaxCall() {
 
   $.ajax ({
 
-    url: "https://api.themoviedb.org/3/search/movie",
+    url: "https://api.themoviedb.org/3/search/multi",
     method: "GET",
     data: outData,
     success: function(data) {
 
       var ress = data.results;
       var totalRes = data.total_results;
-
-      if (totalRes == 0) {
-
-        $.ajax ({
-
-          url: "https://api.themoviedb.org/3/search/tv",
-          method: "GET",
-          data: outData,
-          success: function(data) {
-
-            var ress = data.results;
-            var totalRes = data.total_results;
-
-            if (totalRes == 0) {
-
-              alert("Non abbiamo trovato nessun risultato!")
-            }
-
-            searchResults(ress);
-          },
-          error: function(request, state, error) {
-
-            alert("L'indirizzo del server è errato!");
-          }
-        });
-      }
 
       searchResults(ress);
     },
@@ -100,12 +78,12 @@ function searchResults(ress) {
       poster = "https://extension.illinois.edu/stain/stains-hi/235.jpg"
     }
 
-    ajaxCast(id);
+    searchCast(id);
     stampResults(title, convertVote(vote), overview, id, language, name, poster);
   }
 }
 
-function ajaxCast(id) {
+function searchCast(id) {
 
   $.ajax ({
 
@@ -122,21 +100,13 @@ function ajaxCast(id) {
 
 function getCast(casts, id) {
 
-  var myCast = [];
-
   for (var i = 0; i < 5; i++) {
 
     var cast = casts[i];
-    myCast.push(cast);
+    var name = cast.name;
+
+    stampCast(name, id);
   };
-
-  for (var i = 0; i < myCast.length; i++) {
-
-    var newCast = myCast[i];
-    var name = newCast.name;
-
-    stampCast(name, id)
-  }
 }
 
 function stampCast(name, id) {
@@ -211,10 +181,10 @@ function stampResults(title, vote, overview, id, language, name, poster) {
   var finalHTML = compiled(data);
 
   $(".container").append(finalHTML);
-  voteTostar(id, vote);
+  convertVoteTostar(id, vote);
 }
 
-function voteTostar(id, vote) {
+function convertVoteTostar(id, vote) {
 
   var liId = $("li[data-id='" + id + "']");
 
@@ -264,7 +234,7 @@ function init() {
   var h1 = $("h1");
 
   h1.on("click", h1Click);
-  input.on("click", ajaxCall);
+  input.on("click", searchMovieAndtvSeries);
   $(document).on("mouseenter", ".films", filmEnter);
   $(document).on("mouseleave", ".films", filmLeave);
   mostPopularFilms();
@@ -272,7 +242,7 @@ function init() {
 
     if (e.which == 13) {
 
-      ajaxCall()
+      searchMovieAndtvSeries();
     }
   })
 }
