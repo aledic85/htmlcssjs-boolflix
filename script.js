@@ -100,8 +100,50 @@ function searchResults(ress) {
       poster = "https://extension.illinois.edu/stain/stains-hi/235.jpg"
     }
 
+    ajaxCast(id);
     stampResults(title, convertVote(vote), overview, id, language, name, poster);
   }
+}
+
+function ajaxCast(id) {
+
+  $.ajax ({
+
+    url: "https://api.themoviedb.org/3/movie/" + id + "/credits?api_key=210aa1b90aa672bcceb73012579eaeef",
+    method: "GET",
+    success: function(data) {
+
+      var casts = data.cast;
+
+      getCast(casts, id);
+    }
+  })
+}
+
+function getCast(casts, id) {
+
+  var myCast = [];
+
+  for (var i = 0; i < 5; i++) {
+
+    var cast = casts[i];
+    myCast.push(cast);
+  };
+
+  for (var i = 0; i < myCast.length; i++) {
+
+    var newCast = myCast[i];
+    var name = newCast.name;
+
+    stampCast(name, id)
+  }
+}
+
+function stampCast(name, id) {
+
+  var liId = $("li[data-id='" + id + 'c' + "']");
+
+  liId.text(liId.text() + " " + name);
 }
 
 function convertVote(vote) {
@@ -160,7 +202,8 @@ function stampResults(title, vote, overview, id, language, name, poster) {
     id: id,
     lang: fromLangToFlag(language),
     name: name,
-    poster: poster
+    poster: poster,
+    idc: id + "c"
   }
 
   var template = $("#template").html();
