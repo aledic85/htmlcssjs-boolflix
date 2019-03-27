@@ -2,7 +2,7 @@ function mostPopularFilms() {
 
   $.ajax ({
 
-    url: "https://api.themoviedb.org/3/trending/all/week",
+    url: "https://api.themoviedb.org/3/movie/popular",
     method: "GET",
 	  data: {
 		    api_key: "210aa1b90aa672bcceb73012579eaeef",
@@ -105,6 +105,7 @@ function searchResultsMovie(ress) {
     }
 
     searchCastMovie(id);
+    searchGenreMovie(id);
     stampResults(title, convertVote(vote), overview, id, language, name, poster);
   }
 }
@@ -129,8 +130,39 @@ function searchResultsTv(ress) {
     }
 
     searchCastTv(id);
+    searchGenreTv(id);
     stampResults(title, convertVote(vote), overview, id, language, name, poster);
   }
+}
+
+function searchGenreMovie(id) {
+
+  $.ajax ({
+
+    url: "https://api.themoviedb.org/3/movie/" + id + "?api_key=210aa1b90aa672bcceb73012579eaeef",
+    method: "GET",
+    success: function(data) {
+
+      var genres = data.genres;
+
+      getGenre(genres, id);
+    }
+  });
+}
+
+function searchGenreTv(id) {
+
+  $.ajax ({
+
+    url: "https://api.themoviedb.org/3/tv/" + id + "?api_key=210aa1b90aa672bcceb73012579eaeef",
+    method: "GET",
+    success: function(data) {
+
+      var genres = data.genres;
+
+      getGenre(genres, id);
+    }
+  });
 }
 
 function searchCastMovie(id) {
@@ -145,7 +177,7 @@ function searchCastMovie(id) {
 
       getCast(casts, id);
     }
-  })
+  });
 }
 
 function searchCastTv(id) {
@@ -163,6 +195,17 @@ function searchCastTv(id) {
   })
 }
 
+function getGenre(genres, id) {
+
+  for (var i = 0; i < genres.length; i++) {
+
+    var genre = genres[i];
+    var genreName = genre.name;
+
+    stampGenre(genreName, id);
+  }
+}
+
 function getCast(casts, id) {
 
   for (var i = 0; i < 5; i++) {
@@ -178,7 +221,14 @@ function stampCast(name, id) {
 
   var liId = $("li[data-id='" + id + 'c' + "']");
 
-  liId.text(liId.text() + " " + name);
+  liId.text(liId.text() + " " + name + ",");
+}
+
+function stampGenre(genre, id) {
+
+  var liId = $("li[data-id='" + id + 'g' + "']");
+
+  liId.text(liId.text() + " " + genre + ",");
 }
 
 function convertVote(vote) {
@@ -238,7 +288,8 @@ function stampResults(title, vote, overview, id, language, name, poster) {
     lang: fromLangToFlag(language),
     name: name,
     poster: poster,
-    idc: id + "c"
+    idc: id + "c",
+    idg: id + "g",
   }
 
   var template = $("#template").html();
