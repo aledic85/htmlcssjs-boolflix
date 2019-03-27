@@ -11,7 +11,7 @@ function mostPopularFilms() {
     success: function(data) {
 
       var ress = data.results;
-      searchResults(ress);
+      searchResultsMovie(ress);
     },
     error: function(request, state, error) {
 
@@ -34,7 +34,7 @@ function searchMovieAndtvSeries() {
 
   $.ajax ({
 
-    url: "https://api.themoviedb.org/3/search/multi",
+    url: "https://api.themoviedb.org/3/search/movie",
     method: "GET",
     data: outData,
     success: function(data) {
@@ -42,12 +42,33 @@ function searchMovieAndtvSeries() {
       var ress = data.results;
       var totalRes = data.total_results;
 
-      if (ress == 0) {
+      if (totalRes == 0) {
 
-        alert("Nessun risultato!");
+        $.ajax ({
+
+          url: "https://api.themoviedb.org/3/search/tv",
+          method: "GET",
+          data: outData,
+          success: function(data) {
+
+            var ress = data.results;
+            var totalRes = data.total_results;
+
+            if (totalRes == 0) {
+
+              alert("Non abbiamo trovato nessun risultato!")
+            }
+
+            searchResultsTv(ress);
+          },
+          error: function(request, state, error) {
+
+            alert("L'indirizzo del server è errato!");
+          }
+        });
       }
 
-      searchResults(ress);
+      searchResultsMovie(ress);
     },
     error: function(request, state, error) {
 
@@ -64,7 +85,7 @@ function userInput() {
   return meVal;
 }
 
-function searchResults(ress) {
+function searchResultsMovie(ress) {
 
   for (var i = 0; i < ress.length; i++) {
 
@@ -83,16 +104,55 @@ function searchResults(ress) {
       poster = "https://extension.illinois.edu/stain/stains-hi/235.jpg"
     }
 
-    searchCast(id);
+    searchCastMovie(id);
     stampResults(title, convertVote(vote), overview, id, language, name, poster);
   }
 }
 
-function searchCast(id) {
+function searchResultsTv(ress) {
+
+  for (var i = 0; i < ress.length; i++) {
+
+    var res = ress[i];
+    var title = res.title;
+    var vote = res.vote_average;
+    var overview = res.overview;
+    var id = res.id;
+    var language = res.original_language;
+    var name = res.name;
+    var pos = res.poster_path;
+    var poster = "https://image.tmdb.org/t/p/original" + pos;
+
+    if (pos == null) {
+
+      poster = "https://extension.illinois.edu/stain/stains-hi/235.jpg"
+    }
+
+    searchCastTv(id);
+    stampResults(title, convertVote(vote), overview, id, language, name, poster);
+  }
+}
+
+function searchCastMovie(id) {
 
   $.ajax ({
 
     url: "https://api.themoviedb.org/3/movie/" + id + "/credits?api_key=210aa1b90aa672bcceb73012579eaeef",
+    method: "GET",
+    success: function(data) {
+
+      var casts = data.cast;
+
+      getCast(casts, id);
+    }
+  })
+}
+
+function searchCastTv(id) {
+
+  $.ajax ({
+
+    url: "https://api.themoviedb.org/3/tv/" + id + "/credits?api_key=210aa1b90aa672bcceb73012579eaeef",
     method: "GET",
     success: function(data) {
 
