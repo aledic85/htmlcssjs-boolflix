@@ -18,8 +18,8 @@ function mostPopularFilms() {
 
 function ajaxCall() {
 
-  var li = $(".films");
-  li.remove();
+  var films = $(".films");
+  films.remove();
 
   var outData = {
 
@@ -206,11 +206,21 @@ function filmLeave() {
   me.children("ul").hide();
 }
 
+function h1Click() {
+
+  var films = $(".films");
+
+  films.remove();
+  mostPopularFilms();
+}
+
 function init() {
 
   var input = $("#input-btn");
   var inputTxt = $("#input-txt");
+  var h1 = $("h1");
 
+  h1.on("click", h1Click);
   input.on("click", ajaxCall);
   $(document).on("mouseenter", ".films", filmEnter);
   $(document).on("mouseleave", ".films", filmLeave);
