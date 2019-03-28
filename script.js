@@ -11,7 +11,7 @@ function mostPopularFilms() {
     success: function(data) {
 
       var ress = data.results;
-      
+
       searchResultsMovie(ress);
     },
     error: function(request, state, error) {
@@ -23,14 +23,16 @@ function mostPopularFilms() {
 
 function searchMovie() {
 
+  var input = userInputMovie()
   var films = $(".films");
+
   films.remove();
 
   var outData = {
 
     api_key: "210aa1b90aa672bcceb73012579eaeef",
     language: "it-IT",
-    query: userInputMovie(),
+    query: input,
   }
 
   $.ajax ({
@@ -42,13 +44,40 @@ function searchMovie() {
 
       var ress = data.results;
       var totalRes = data.total_results;
+      var totalPages = data.total_pages;
 
       if (totalRes == 0) {
 
-        alert("Non abbiamo trovato nessun risultato!")
+        alert("Non abbiamo trovato nessun risultato!");
       }
 
-      searchResultsMovie(ress);
+      if (totalPages > 1) {
+
+        for (var i = 1; i <= totalPages; i++) {
+
+          $.ajax ({
+
+            url: "https://api.themoviedb.org/3/search/movie",
+            method: "GET",
+            data: {
+
+              api_key: "210aa1b90aa672bcceb73012579eaeef",
+              language: "it-IT",
+              query: input,
+              page: i,
+            },
+            success: function(data) {
+
+              var ress = data.results;
+
+              searchResultsMovie(ress);
+            }
+          });
+        };
+      } else {
+
+        searchResultsMovie(ress);
+       }
     },
     error: function(request, state, error) {
 
@@ -59,14 +88,16 @@ function searchMovie() {
 
 function searchTvSeries() {
 
+  var input = userInputTv()
   var films = $(".films");
+
   films.remove();
 
   var outData = {
 
     api_key: "210aa1b90aa672bcceb73012579eaeef",
     language: "it-IT",
-    query: userInputTv(),
+    query: input,
   }
 
   $.ajax ({
@@ -78,18 +109,45 @@ function searchTvSeries() {
 
       var ress = data.results;
       var totalRes = data.total_results;
+      var totalPages = data.total_pages;
 
-        if (totalRes == 0) {
+      if (totalRes == 0) {
 
-          alert("Non abbiamo trovato nessun risultato!");
-        }
-
-          searchResultsTv(ress);
-    },
-      error: function(request, state, error) {
-
-        alert("L'indirizzo del server è errato!");
+        alert("Non abbiamo trovato nessun risultato!");
       }
+
+      if (totalPages > 1) {
+
+        for (var i = 1; i <= totalPages; i++) {
+
+          $.ajax ({
+
+            url: "https://api.themoviedb.org/3/search/tv",
+            method: "GET",
+            data: {
+
+              api_key: "210aa1b90aa672bcceb73012579eaeef",
+              language: "it-IT",
+              query: input,
+              page: i,
+            },
+            success: function(data) {
+
+              var ress = data.results;
+
+              searchResultsTv(ress);
+            }
+          });
+        };
+      } else {
+
+        searchResultsTv(ress);
+       }
+    },
+    error: function(request, state, error) {
+
+      alert("L'indirizzo del server è errato!");
+    }
   });
 }
 
@@ -125,7 +183,7 @@ function searchResultsMovie(ress) {
 
     if (pos == null) {
 
-      poster = "https://extension.illinois.edu/stain/stains-hi/235.jpg"
+      poster = "https://extension.illinois.edu/stain/stains-hi/235.jpg";
     }
 
     searchCastMovie(id);
@@ -150,7 +208,7 @@ function searchResultsTv(ress) {
 
     if (pos == null) {
 
-      poster = "https://extension.illinois.edu/stain/stains-hi/235.jpg"
+      poster = "https://extension.illinois.edu/stain/stains-hi/235.jpg";
     }
 
     searchCastTv(id);
@@ -349,7 +407,7 @@ function filmEnter() {
   var me = $(this);
 
   me.children("ul").show();
-  me.css("cursor", "pointer")
+  me.css("cursor", "pointer");
 }
 
 function filmLeave() {
@@ -359,7 +417,7 @@ function filmLeave() {
   me.children("ul").hide();
 }
 
-function h1Click() {
+function boolflixClick() {
 
   var films = $(".films");
 
@@ -373,9 +431,9 @@ function init() {
   var inputTxtMovie = $("#input-txt-movie");
   var inputTv = $("#input-btn-tv");
   var inputTxtTv = $("#input-txt-tv");
-  var h1 = $("h1");
+  var boolflix = $("h1");
 
-  h1.on("click", h1Click);
+  boolflix.on("click", boolflixClick);
   inputMovie.on("click", searchMovie);
   inputTv.on("click", searchTvSeries);
   $(document).on("mouseenter", ".films", filmEnter);
@@ -395,7 +453,7 @@ function init() {
 
       searchTvSeries();
     }
-  })
+  });
 }
 
 $(document).ready(init);
