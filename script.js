@@ -290,11 +290,11 @@ function getGenre(genres, id) {
 
 function getCast(casts, id) {
 
-  for (var i = 0; i < 5; i++) {
+  for (var i = 0; i < 5 && i < casts.length; i++) {
 
     var cast = casts[i];
     var name = cast.name;
-
+  
     stampCast(name, id);
   };
 }
