@@ -11,6 +11,7 @@ function mostPopularFilms() {
     success: function(data) {
 
       var ress = data.results;
+      
       searchResultsMovie(ress);
     },
     error: function(request, state, error) {
@@ -20,7 +21,7 @@ function mostPopularFilms() {
   })
 }
 
-function searchMovieAndtvSeries() {
+function searchMovie() {
 
   var films = $(".films");
   films.remove();
@@ -29,7 +30,7 @@ function searchMovieAndtvSeries() {
 
     api_key: "210aa1b90aa672bcceb73012579eaeef",
     language: "it-IT",
-    query: userInput(),
+    query: userInputMovie(),
   }
 
   $.ajax ({
@@ -44,28 +45,7 @@ function searchMovieAndtvSeries() {
 
       if (totalRes == 0) {
 
-        $.ajax ({
-
-          url: "https://api.themoviedb.org/3/search/tv",
-          method: "GET",
-          data: outData,
-          success: function(data) {
-
-            var ress = data.results;
-            var totalRes = data.total_results;
-
-            if (totalRes == 0) {
-
-              alert("Non abbiamo trovato nessun risultato!")
-            }
-
-            searchResultsTv(ress);
-          },
-          error: function(request, state, error) {
-
-            alert("L'indirizzo del server è errato!");
-          }
-        });
+        alert("Non abbiamo trovato nessun risultato!")
       }
 
       searchResultsMovie(ress);
@@ -77,9 +57,53 @@ function searchMovieAndtvSeries() {
   });
 }
 
-function userInput() {
+function searchTvSeries() {
 
-  var me = $("#input-txt");
+  var films = $(".films");
+  films.remove();
+
+  var outData = {
+
+    api_key: "210aa1b90aa672bcceb73012579eaeef",
+    language: "it-IT",
+    query: userInputTv(),
+  }
+
+  $.ajax ({
+
+    url: "https://api.themoviedb.org/3/search/tv",
+    method: "GET",
+    data: outData,
+    success: function(data) {
+
+      var ress = data.results;
+      var totalRes = data.total_results;
+
+        if (totalRes == 0) {
+
+          alert("Non abbiamo trovato nessun risultato!");
+        }
+
+          searchResultsTv(ress);
+    },
+      error: function(request, state, error) {
+
+        alert("L'indirizzo del server è errato!");
+      }
+  });
+}
+
+function userInputMovie() {
+
+  var me = $("#input-txt-movie");
+  var meVal = me.val();
+
+  return meVal;
+}
+
+function userInputTv() {
+
+  var me = $("#input-txt-tv");
   var meVal = me.val();
 
   return meVal;
@@ -345,20 +369,31 @@ function h1Click() {
 
 function init() {
 
-  var input = $("#input-btn");
-  var inputTxt = $("#input-txt");
+  var inputMovie = $("#input-btn-movie");
+  var inputTxtMovie = $("#input-txt-movie");
+  var inputTv = $("#input-btn-tv");
+  var inputTxtTv = $("#input-txt-tv");
   var h1 = $("h1");
 
   h1.on("click", h1Click);
-  input.on("click", searchMovieAndtvSeries);
+  inputMovie.on("click", searchMovie);
+  inputTv.on("click", searchTvSeries);
   $(document).on("mouseenter", ".films", filmEnter);
   $(document).on("mouseleave", ".films", filmLeave);
   mostPopularFilms();
-  inputTxt.keyup(function(e) {
+  inputTxtMovie.keyup(function(e) {
 
     if (e.which == 13) {
 
-      searchMovieAndtvSeries();
+      searchMovie();
+    }
+  });
+
+  inputTxtTv.keyup(function(e) {
+
+    if (e.which == 13) {
+
+      searchTvSeries();
     }
   })
 }
