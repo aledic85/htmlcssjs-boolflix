@@ -20,7 +20,11 @@
       <div class="films" style="background-image: url({{poster}})">
         <ul>
           <li>Titolo: {{title}} {{name}}</li>
-          <li>Lingua originale: <img src="{{lang}}" alt=""></li>
+          {{# if langImg}}
+            <li>Lingua originale: <img src="{{langImg}}" alt=""></li>
+          {{else}}
+            <li>Lingua originale: {{lang}}</li>
+          {{/if}}
           <li data-id ="{{id}}">Voto: {{vote}} </li>
           <li>Trama: {{overview}}</li>
           <li data-id ="{{idc}}">Cast: </li>

@@ -294,7 +294,7 @@ function getCast(casts, id) {
 
     var cast = casts[i];
     var name = cast.name;
-  
+
     stampCast(name, id);
   };
 }
@@ -353,7 +353,7 @@ function fromLangToFlag(language) {
 
     default:
 
-      flag = "img/unknow.svg";
+      flag = null;
   }
 
   return flag;
@@ -367,7 +367,8 @@ function stampResults(title, vote, overview, id, language, name, poster) {
     vote: vote,
     overview: overview,
     id: id,
-    lang: fromLangToFlag(language),
+    langImg: fromLangToFlag(language),
+    lang: language,
     name: name,
     poster: poster,
     idc: id + "c",
