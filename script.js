@@ -279,6 +279,13 @@ function searchCastTv(id) {
 
 function getGenre(genres, id) {
 
+  if (genres.length == 0) {
+
+    var liId = $("li[data-id='" + id + 'g' + "']");
+
+    liId.text("Il genere di questo titolo non è presente nel database");
+  }
+
   for (var i = 0; i < genres.length; i++) {
 
     var genre = genres[i];
@@ -289,6 +296,13 @@ function getGenre(genres, id) {
 }
 
 function getCast(casts, id) {
+
+  if (casts.length == 0) {
+
+    var liId = $("li[data-id='" + id + 'c' + "']");
+
+    liId.text("Il cast di questo titolo non è presente nel database");
+  }
 
   for (var i = 0; i < 5 && i < casts.length; i++) {
 
@@ -303,14 +317,14 @@ function stampCast(name, id) {
 
   var liId = $("li[data-id='" + id + 'c' + "']");
 
-  liId.text(liId.text() + " " + name + ",");
+  liId.text(liId.text() + " " + name);
 }
 
 function stampGenre(genre, id) {
 
   var liId = $("li[data-id='" + id + 'g' + "']");
 
-  liId.text(liId.text() + " " + genre + ",");
+  liId.text(liId.text() + " " + genre);
 }
 
 function convertVote(vote) {
