@@ -177,7 +177,6 @@ function searchResultsMovie(ress) {
     var overview = res.overview;
     var id = res.id;
     var language = res.original_language;
-    var name = res.name;
     var pos = res.poster_path;
     var poster = "https://image.tmdb.org/t/p/original" + pos;
 
@@ -186,9 +185,7 @@ function searchResultsMovie(ress) {
       poster = "https://extension.illinois.edu/stain/stains-hi/235.jpg";
     }
 
-    searchCastMovie(id);
-    searchGenreMovie(id);
-    stampResults(title, convertVote(vote), overview, id, language, name, poster);
+    stampResultsMovie(title, convertVote(vote), overview, id, language, poster);
   }
 }
 
@@ -197,12 +194,12 @@ function searchResultsTv(ress) {
   for (var i = 0; i < ress.length; i++) {
 
     var res = ress[i];
-    var title = res.title;
+    var title = res.name;
     var vote = res.vote_average;
     var overview = res.overview;
     var id = res.id;
     var language = res.original_language;
-    var name = res.name;
+    var title = res.name;
     var pos = res.poster_path;
     var poster = "https://image.tmdb.org/t/p/original" + pos;
 
@@ -211,9 +208,7 @@ function searchResultsTv(ress) {
       poster = "https://extension.illinois.edu/stain/stains-hi/235.jpg";
     }
 
-    searchCastTv(id);
-    searchGenreTv(id);
-    stampResults(title, convertVote(vote), overview, id, language, name, poster);
+    stampResultsTv(title, convertVote(vote), overview, id, language, poster);
   }
 }
 
@@ -373,7 +368,7 @@ function fromLangToFlag(language) {
   return flag;
 }
 
-function stampResults(title, vote, overview, id, language, name, poster) {
+function stampResultsMovie(title, vote, overview, id, language, poster) {
 
   var data = {
 
@@ -383,10 +378,34 @@ function stampResults(title, vote, overview, id, language, name, poster) {
     id: id,
     langImg: fromLangToFlag(language),
     lang: language,
-    name: name,
     poster: poster,
     idc: id + "c",
     idg: id + "g",
+    class: "movie"
+  }
+
+  var template = $("#template").html();
+  var compiled = Handlebars.compile(template);
+  var finalHTML = compiled(data);
+
+  $(".container").append(finalHTML);
+  convertVoteTostar(id, vote);
+}
+
+function stampResultsTv(title, vote, overview, id, language, poster) {
+
+  var data = {
+
+    title: title,
+    vote: vote,
+    overview: overview,
+    id: id,
+    langImg: fromLangToFlag(language),
+    lang: language,
+    poster: poster,
+    idc: id + "c",
+    idg: id + "g",
+    class: "serie"
   }
 
   var template = $("#template").html();
@@ -420,9 +439,24 @@ function convertVoteTostar(id, vote) {
 function filmEnter() {
 
   var me = $(this);
+  var type = me.attr("class");
+  var liGenre = me.find("li.genre").attr("data-id");
+  var liCast = me.find("li.cast").attr("data-id");
+  var idGenre = liGenre.slice(0, -1);
+  var idCast = liCast.slice(0, -1);
 
   me.children("ul").show();
   me.css("cursor", "pointer");
+
+  if (type == "films movie") {
+
+    searchCastMovie(idCast);
+    searchGenreMovie(idGenre);
+  } else if (type == "films serie") {
+
+    searchCastTv(idCast);
+    searchGenreTv(idGenre);
+  }
 }
 
 function filmLeave() {

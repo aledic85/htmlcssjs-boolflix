@@ -17,9 +17,9 @@
      <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.0/handlebars.min.js" charset="utf-8"></script>
      <!-- JS: MY TEMPLATE -->
      <script id="template" type="text/x-handlebars-template">
-      <div class="films" style="background-image: url({{poster}})">
+      <div class="films {{class}}" style="background-image: url({{poster}})">
         <ul>
-          <li>Titolo: {{title}} {{name}}</li>
+          <li>Titolo: {{title}}</li>
           {{#if langImg}}
             <li>Lingua originale: <img src="{{langImg}}" alt=""></li>
           {{else}}
@@ -31,8 +31,8 @@
           {{else}}
             <li>La trama di questo titolo non è presente nel database</li>
           {{/if}}
-          <li data-id ="{{idc}}">Cast: </li>
-          <li data-id ="{{idg}}">Genere: </li>
+          <li class="cast" data-id ="{{idc}}">Cast: </li>
+          <li class="genre" data-id ="{{idg}}">Genere: </li>
         </ul>
       </div>
      </script>
