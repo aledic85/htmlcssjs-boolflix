@@ -442,9 +442,13 @@ function filmEnter() {
   var type = me.attr("class");
   var liGenre = me.find("li.genre").attr("data-id");
   var liCast = me.find("li.cast").attr("data-id");
+  var liGenreText = me.find("li.genre");
+  var liCastText = me.find("li.cast");
   var idGenre = liGenre.slice(0, -1);
   var idCast = liCast.slice(0, -1);
 
+  liCastText.text("Cast:");
+  liGenreText.text("Genere:")
   me.children("ul").show();
   me.css("cursor", "pointer");
 
@@ -462,7 +466,11 @@ function filmEnter() {
 function filmLeave() {
 
   var me = $(this);
+  var liGenre = me.find("li.genre");
+  var liCast = me.find("li.cast");
 
+  liGenre.text("");
+  liCast.text("");
   me.children("ul").hide();
 }
 
